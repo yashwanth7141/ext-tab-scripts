@@ -1,0 +1,21 @@
+# Python
+__pycache__/
+*.py[cod]
+
+# Virtual environment
+venv/
+.venv/
+
+# Logs
+logs/
+*.log
+
+# Generated reports
+reports/
+
+# Local configuration
+config.json
+
+# Test/generated data
+scr_test/
+reg_mul/
