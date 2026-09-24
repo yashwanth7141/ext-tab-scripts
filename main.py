@@ -171,7 +171,7 @@ def discover_schema_paths(root_path):
     # Case 2:
     # Child directories may represent additional schemas
     for child in root_path.iterdir():
-        if not child.is_dir():
+        if not child.is_dir() or child.name == "parquet":
             continue
 
         if validate_folder(child):
@@ -377,8 +377,8 @@ def init_table_creation(conn, config, spark):
     try:
         while True:
             parquet_path = input(
-                "\nEnter the Destination Path containing parquet files "
-                "(Path up to application name folder): "
+                "\nEnter the Parquet Destination Path containing parquet files "
+                "(Path up to the application name folder): "
             ).strip()
 
             if not parquet_path:

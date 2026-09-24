@@ -41,7 +41,7 @@ def get_config_details():
     """Prompt user for PostgreSQL connection details and server name then save them if confirmed."""
     print("\nPlease enter the postgres connection details")
     postgres_conn = {
-        "host": get_non_empty_input("IP address: "),
+        "host": get_non_empty_input("Hostname / IP address: "),
         "port": input("Port number [default: 5432]: ") or "5432",
         "db_name": get_non_empty_input("Database name: "),
         "user": get_non_empty_input("Username: "),
@@ -75,14 +75,14 @@ def get_config_details():
                     sys.exit()
 
 
-        save_flag = input("Proceed to save? (y/n)[default y]: ") or 'y'
+        save_flag = input("\nProceed to save? (y/n)[default y]: ") or 'y'
 
         if save_flag == "y":
             config_file_path = Path("config.json")
             if config_file_path.exists():
                 replace_flag = input(
-                    f"{config_file_path} already exists. Do you want to replace it? [y/n]: "
-                ).lower()
+                    f"\n{config_file_path} file already exists. Do you want to replace it? (y/n)[default y]: "
+                ).lower() or "y"
                 if replace_flag != "y":
                     print("\nCredentials not saved.\n")
                     sys.exit()
