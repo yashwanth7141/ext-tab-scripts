@@ -128,46 +128,80 @@ The script automatically discovers the available schema directories and creates 
 Run:
 
 ```bash
-python main.py
+python3.12 main.py
 ```
+
+The script provides options for external table creation.
+
+### Option 1 — Create External Tables
+
+This option creates PostgreSQL schemas and Foreign Tables based on the Parquet files found under the supplied application destination path.
 
 The script prompts for the destination path:
-
-```text
-Enter the Destination Path containing parquet files (Path up to application name folder):
-```
 
 Example:
 
 ```text
-Enter the Destination Path containing parquet files (Path up to application name): /nfs/prddroptim/par/scr_test
+Enter the Destination Path containing parquet files (Path up to application name): /nfs/prddroptim/parq_storage/enwisen
 ```
 
 The script then discovers the available schemas:
 
+Example:
+
 ```text
 Discovered 3 schema(s):
-  - scr_test
-  - scr_test_OPTIMDIR
-  - scr_test_OPTIMSRC130
+  - enwisen
+  - enwisen_OPTIMDIR
+  - enwisen_OPTIMSRC130
 ```
 
 It processes each schema and creates the corresponding Foreign Tables.
 
-## Parquet Files
+If a Foreign Table already exists:
 
-A table directory may contain one or multiple Parquet files.
+* When replace_existing is true, the existing table is dropped and recreated.
 
-Example:
+* When replace_existing is false, the existing table is skipped.
+
+
+### Option 2 — Merge Parquet Files
+
+This option allows Parquet files from multiple application or schema paths to be combined into a single PostgreSQL Foreign Table.
+
+The source paths are supplied individually, followed by the target PostgreSQL schema and table name.
+
+The script discovers the actual Parquet files under the supplied paths and creates one Foreign Table referencing all applicable Parquet files.
+
+Example source structure:
 
 ```text
-OPTIM_ITEMS.parquet/
-├── part-00000-....parquet
-├── part-00001-....parquet
-└── part-00002-....parquet
+application_1/
+└── parquet/
+    └── OPTIM_ITEMS.parquet/
+        ├── part-00000-....parquet
+        └── part-00001-....parquet
+
+application_2/
+└── parquet/
+    └── OPTIM_ITEMS.parquet/
+        └── part-00000-....parquet
 ```
 
-All valid Parquet files within the table directory are included when creating the Foreign Table.
+The files can be merged into a single target Foreign Table:
+
+```text
+target_schema.OPTIM_ITEMS
+```
+
+The generated Foreign Table references the Parquet files from all supplied source paths.
+
+The same replace_existing behavior applies to merged Foreign Tables:
+
+* When replace_existing is true, the existing target table is dropped and recreated.
+
+* When replace_existing is false, the existing target table is skipped.
+
 
 ## Logs and Reports
 
