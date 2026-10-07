@@ -19,3 +19,4 @@ config.json
 # Test/generated data
 scr_test/
 reg_mul/
+merge_paths/
